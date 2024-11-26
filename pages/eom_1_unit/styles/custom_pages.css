@@ -1,0 +1,35 @@
+/* ВАЖНО - В данном файле все классы должны быть с припиской _custom */
+
+.two_img_custom {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.two_img_custom  div {
+    padding: 10px;
+}
+
+
+
+@media (max-width: 720px){
+    .two_img_custom{
+        flex-direction: column;
+    }
+    
+    .two_img_custom > div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .formula_custom img {
+        width: 95%;
+    }
+}
+
+.two_img_custom img {
+    width: 80%;
+    max-width: 550px;
+}
