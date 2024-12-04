@@ -6,11 +6,40 @@
     flex-direction: row;
 }
 
+.two_img_1_custom {
+    width: 50%;
+}
+
+.two_img_2_custom {
+    width: 50%;
+}
+
+
+.two_img_custom img {
+    max-width: 550px;
+}
+
+
+.four_img_custom {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content:space-between
+}
+
 .two_img_custom  div {
     padding: 10px;
 }
 
 
+#content > div:nth-child(7) > div > img {
+    min-width: 150px;
+}
+
+.math_equation_custom {
+    font-size: 30px;
+}
 
 @media (max-width: 720px){
     .two_img_custom{
@@ -29,7 +58,3 @@
     }
 }
 
-.two_img_custom img {
-    width: 80%;
-    max-width: 550px;
-}
