@@ -1051,6 +1051,12 @@ body, html {
     }
 }
 @media (max-width: 565px){
+
+    img {
+        width: 100%;
+        min-width: initial !important;
+    }
+
     .small {
         max-height: 55px !important;
     }

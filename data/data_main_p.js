@@ -59,7 +59,7 @@ const keyWords = `Сила \n векторная физическая велич
 3) Профессиональный модуль
 4) МДК
 5) Раздел
-6) Тема*/
+6) Тема */
 const infoContent = 
 `${numFgos} ${numFgosTxt}
 ${numFgos} ${numFgosTxt}
