@@ -19,6 +19,9 @@
     max-width: 550px;
 }
 
+#content > div:nth-child(4) > div > img {
+    width: 80%;
+}
 
 .four_img_custom {
     display: flex;
@@ -44,6 +47,10 @@
 @media (max-width: 720px){
     .two_img_custom{
         flex-direction: column;
+    }
+
+    #content > div:nth-child(4) > div > img {
+        width: 100%;
     }
     
     .two_img_custom > div {

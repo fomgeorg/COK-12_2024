@@ -108,7 +108,7 @@ window.dataLoaded = false;
             "subtitle": "Центр параллельных сил",
             "paragraph_1":[
                 {"image": true, "image_path": "./content/page_content/img3_1.png", "img_sign": " "},
-                {"text": `<p>Рассмотрим пространственную систему трех вертикальных параллельных сил <span class="math_equation"> $ \\vec{F_1}, \\vec{F_2} $ и $ \\vec{F_3} $</span>. Определим равнодействующую сил <span class="math_equation"> $ \\vec{F}_{1-2} $ и $ \\vec{F_2} $</span>. Равнодействующая <span class="math_equation"> $ \\vec{F}_{1-2} $</span> двух сонаправленных параллельных сил <span class="math_equation"> $ \\vec{F_1} $ и $ \\vec{F_2} $</span> равна по величине их сумме, а её линия действия делит отрезок, соединяющий точки приложения этих сил обратно пропорционально их величинам внутренним образом. Точка B − точка приложения равнодействующей этих двух сил.</p>
+                {"text": `<p>Рассмотрим пространственную систему трех вертикальных параллельных сил <span class="math_equation"> $ \\vec{F_1}, \\vec{F_2} $ и $ \\vec{F_3} $</span>. Определим равнодействующую сил <span class="math_equation"> $ \\vec{F}_{1} $ и $ \\vec{F_2} $</span>. Равнодействующая <span class="math_equation"> $ \\vec{F}_{1-2} $</span> двух сонаправленных параллельных сил <span class="math_equation"> $ \\vec{F_1} $ и $ \\vec{F_2} $</span> равна по величине их сумме, а её линия действия делит отрезок, соединяющий точки приложения этих сил обратно пропорционально их величинам внутренним образом. Точка B − точка приложения равнодействующей этих двух сил.</p>
                  <p>
                 <span class="math_equation">$ F_{1-2} = F_1 + F_2 $</span> и <span class="math_equation math_equation_custom">
                     $ \\frac{F_{1-2}}{A_1 A_2} = \\frac{F_1}{A_2 B} = \\frac{F_2}{A_1 B}. $ </span>
@@ -121,10 +121,10 @@ window.dataLoaded = false;
                     </p>
 
                     <p>
-                    <span class="math_equation">$ \\vec{R} = \\vec{F}_{1-2} + \\vec{F_3} = \\vec{F_1} + \\vec{F_2} + \\vec{F_3} $</span>
+                    <span class="math_equation">$ R = F_{1-2} + F_{3} = F_{1} + F_{2} + F_{3} $</span>
                     и
                     <span class="math_equation math_equation_custom">
-                        $ \\frac{\\vec{R}}{A_3 B} = \\frac{\\vec{F}_{1-2}}{A_3 C} = \\frac{\\vec{F_3}}{C B}. $
+                        $ \\frac{{R}}{A_3 B} = \\frac{{F}_{1-2}}{A_3 C} = \\frac{{F_3}}{C B}. $
                     </span>
                     </p>`},
                 {"image": false, "image_path": "./content/page_content/test_video.mp4", "img_sign": " "},
@@ -179,7 +179,7 @@ window.dataLoaded = false;
                     <span class="math_equation math_equation_custom">$ y_C = \\frac{\\sum F_k \\cdot y_k}{\\sum F_k} $</span>.
                     </p>
                     <p>
-                    Таким образом координаты центра параллельных сил определяются по формулам:</p> <p>
+                    Таким образом, координаты центра параллельных сил определяются по формулам:</p> <p>
                     <span class="math_equation math_equation_custom">$ x_C = \\frac{\\sum F_k \\cdot x_k}{\\sum F_k} $</span>; 
                     <span class="math_equation math_equation_custom">$ y_C = \\frac{\\sum F_k \\cdot y_k}{\\sum F_k} $</span>; 
                     <span class="math_equation math_equation_custom">$ z_C = \\frac{\\sum F_k \\cdot z_k}{\\sum F_k} $</span>,<p> 
@@ -346,7 +346,7 @@ window.dataLoaded = false;
             ],
             "paragraph_2":[
                 {"image": true, "image_path": "./content/page_content/img8_1.png", "img_sign": " ", "left_img": true},
-                {"text":"Для однородного тела, которое имеет ось, плоскость ил центр симметрии, его центр тяжести лежит на этой оси, в этой плоскости или в центре симметрии соответственно."}
+                {"text":"Для однородного тела, которое имеет ось, плоскость или центр симметрии, его центр тяжести лежит на этой оси, в этой плоскости или в центре симметрии соответственно."}
             ],
             "paragraph_3":[
                 {"text":`
@@ -390,11 +390,11 @@ window.dataLoaded = false;
                 {"text":`
                     <p>
                     Этот метод применяется для сечений, у которых имеются вырезы. Вырезы рассматриваются как части с отрицательной площадью. Изображенную на рисунке фигуру можно разбить на прямоугольник 1 и круг 2. Центр тяжести прямоугольника <span class="math_equation">$ C_1 $</span> лежит на пересечении его диагоналей, а центр тяжести круга <span class="math_equation">$ C_2 $</span> в его геометрическом центре.
-                    Так как круг вырезан, то его площадь <span class="math_equation">$ A_2 $</span> имеет отрицательное значение, т.е. <span class="math_equation">$ -(A_2) $</span>.
+                    Так как круг вырезан, то его площадь <span class="math_equation">$ A_2 $</span> имеет отрицательное значение, т.е. <span class="math_equation">$ (-A_2) $</span>.
                     </p>
                     <p>
                     Фигура 1 – прямоугольник площадью <span class="math_equation">$ A_1 $</span>, с координатами центра тяжести <span class="math_equation">$ C_1(x_1, y_1) $</span>.<br>
-                    Фигура 2 – круг площадью <span class="math_equation">$ -(A_2) $</span>, с координатами центра тяжести <span class="math_equation">$ C_2(x_2, y_2) $</span>.<br>
+                    Фигура 2 – круг площадью <span class="math_equation">$ (-A_2) $</span>, с координатами центра тяжести <span class="math_equation">$ C_2(x_2, y_2) $</span>.<br>
                     Применяя формулу для плоской фигуры, составленной из площадей, координаты центра тяжести <span class="math_equation">$ C $</span> всего сечения определяются следующим образом:
                     </p>
                     <p>
@@ -433,7 +433,7 @@ window.dataLoaded = false;
                 {"text":` Этот метод подходит для фигур с однородной плотностью и позволяет наглядно продемонстрировать свойство центра тяжести.`}
             ],
             "paragraph_5":[
-                {"text":` <p class='blue_header'><b> 1. Метод подвешивания </b></p>`},
+                {"text":` <p class='blue_header'><b> 2. Метод взвешивания  </b></p>`},
             ],
             "paragraph_6":[
                 {"image": true, "image_path": "./content/page_content/img9_2.png", "img_sign": " "},
@@ -460,10 +460,10 @@ window.dataLoaded = false;
                     Зная массу тела (или его вес) <b>G</b>, показания весов в одной из опорных точек <b>N</b> и расстояние между этими точками <b>L</b>, можно вычислить, насколько далеко вторая опорная точка (задний мост) находится от плоскости, в которой располагается центр тяжести, т.е. расстояние x<sub>C</sub>. Применив свойства ряда равных отношений.
                     </p>
                     <p>
-                    <span class="math_equation">$$ \\frac{G}{L} = \\frac{N}{x_C} $$</span>
+                    <span class="math_equation">$$ \\frac{G}{L} = \\frac{N}{x_C}, $$</span>
                     </p>
                     <p>определяем это расстояние</p>
-                    <p><span class="math_equation">$$ x_C = \\frac{N}{G} \\cdot L $$</span></p>
+                    <p><span class="math_equation">$$ x_C = \\frac{N}{G} \\cdot L. $$</span></p>
                     <p>Чтобы убедиться в правильности решения задачи можно провести взвешивание второй опорной точки, т.е. заднего моста.</p>
                     `}
             ],
