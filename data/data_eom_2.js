@@ -23,7 +23,7 @@ const data = {
                 Рассмотрим соотношение 
                 <span class="math_equation math_equation_custom">$ \\frac{F_1}{CB} = \\frac{R}{AB} $</span>. <br><br>
                 Из этого соотношения
-                <span class="math_equation math_equation_custom">$ CB = \\frac{F_1 \\cdot AB}{R} = \\frac{170 \\cdot 0.8}{230} = 0.59 , \\text{м} $</span>. <br>
+                <span class="math_equation math_equation_custom">$ CB = \\frac{F_1 \\cdot AB}{R} = \\frac{170 \\cdot 0.8}{230} = 0.59 \\text{м} $</span>. <br>
                 Модуль равнодействующей <span class="math_equation">$ R = 230 \\text{ Н} $</span> и ее линия действия будет проходить через точку <span class="math_equation">$ C $</span>, расположенную на расстоянии <span class="math_equation">$ 0.59 , \\text{м} $</span> от линии действия силы <span class="math_equation">$ \\vec{F_2} $</span>.` }
         ]
     },
@@ -50,13 +50,13 @@ const data = {
                 Рассмотрим соотношение
                 <span class="math_equation">$ \\frac{F_1}{CB} = \\frac{R}{AB} $</span>.
                 Из этого соотношения
-                <span class="math_equation">$ CB = \\frac{F_1 \\cdot AB}{R} = \\frac{170 \\cdot 0.8}{110} = 1.59 , \\text{м} $</span>.
+                <span class="math_equation">$ CB = \\frac{F_1 \\cdot AB}{R} = \\frac{170 \\cdot 0.8}{110} = 1.59 \\text{м} $</span>.
                 Модуль равнодействующей <span class="math_equation">$ R = 110  \\text{ Н} $</span> и ее линия действия будет проходить через точку <span class="math_equation">$ C $</span>, расположенную на расстоянии <span class="math_equation">$ 1.59 \\text{ м} $</span> от линии действия силы <span class="math_equation">$ \\vec{F_2} $</span>.
                 `}
         ]
     },
     "index_3":{
-        "subtitle": "Решить задачу",
+        "subtitle": "Решить задачу.",
         "step_of_popup": "Решить задачу",
         "test":[
             {"type": 2},
@@ -66,7 +66,7 @@ const data = {
         ],
     },
     "index_4":{
-        "subtitle": "Решить задачу",
+        "subtitle": "Решить задачу.",
         "step_of_popup": "Решить задачу",
         "test":[
             {"type": 2},
@@ -79,7 +79,7 @@ const data = {
         "subtitle": "Изучите зависимость значений координат центра тяжести плоских сечений от их положения в системе координат.",
         "step_of_popup": "Изучите зависимость значений координат центра тяжести плоских сечений от их положения в системе координат.",
         "paragraph_1": [
-            {"text": "<b>В зависимости от расположения сечения в системе координат меняются координаты центра тяжести плоских сечений<b>"},
+            {"text": "<b>В зависимости от расположения сечения в системе координат меняются координаты центра тяжести плоских сечений.<b>"},
             {"text": "<b class='blue_header'>Например:<b>"},
             {"text": `
             <div class='four_img_custom'>   
@@ -269,7 +269,7 @@ const data = {
                 <p>Металлические прокатные изделия могут иметь разнообразную форму, но наиболее часто встречаются:
                     <ul class='ul_custom'>
                     <li>трубы – круглые и профильные;</li>
-                    <li>металлические уголки - равнополочные и неравнополочные;</li>
+                    <li>металлические уголки – равнополочные и неравнополочные;</li>
                     <li>швеллеры;</li>
                     <li>тавры и двутавры (балки);</li>
                     <li>арматурные прутья различного сечения, периодические и гладкие;</li>
