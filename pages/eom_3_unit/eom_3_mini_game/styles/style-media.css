@@ -101,8 +101,11 @@
     }
     .question_type_1_answers > div{
         flex: 0 0 calc(50% - 4vh);
-        height: 15vw;
-        min-height: 140px;
+/*        height: 5vw;*/
+    }
+    .question_type_6_text_content{
+        font-size: clamp(16px,1vw,1.8vw) !important
+        font-weight: 600;
     }
     .custom-dropdown-input{
         min-width: 100px;
@@ -143,8 +146,14 @@
     .custom-dropdown-select div{
         font-size: 15px !important;
     }
+    .question_type_5_dropdown_text{
+        font-size: 1.8vw !important;
+    }
     .custom-dropdown-input-placeholder{
-        font-size: 14px !important;
+        font-size: 1.8vw !important;
+    }
+    .custom-dropdown-image-select div{
+        font-size: 1.8vw !important;
     }
     .state_marker img{
         height: 20px !important;
@@ -191,8 +200,11 @@
     .question_type_1_answer_text{
         font-size: clamp(16px, 1vw, 25px);
         font-weight: 600;
+/*        max-width: 220px;*/
         color: #000;
-        width: 100%;
+/*        white-space: nowrap !important;*/
+        text-overflow: ellipsis !important;
+        overflow: hidden !important;
     }
     .question_type_1_answers input[type=checkbox]{
         min-width: 35px !important;
@@ -248,7 +260,7 @@
     }
     .state_marker {
         top: 5px;
-        left: 4px;
+/*        left: 4px;*/
     }
     .state_marker img {
         width: 30px;
@@ -298,9 +310,12 @@
     .question_type_5_image{
         width: 70% !important; 
     }
+    .question_type_7_text_content{
+        font-size: 1.6vw !important;
+    }
     .question_type_7_body .question_type_7_content_container {
-        width: 110px !important;
-        height: 100px !important;
+        min-width: 20vw !important;
+        min-height: 10vw !important;
     }
     .question_type_6_body .question_type_6_start_point, .question_type_6_body .question_type_6_end_point{
         width: 35px !important;
@@ -435,9 +450,12 @@
     .question_type_5_image{
         width: 100% !important; 
     }
+    .question_type_7_text_content{
+        font-size: 1.8vw !important;
+    }
     .question_type_7_body .question_type_7_content_container {
-        width: 100px !important;
-        height: 100px !important;
+        min-width: 20vw !important;
+        min-height: 12vw !important;
     }
     .buttons_box{
         display: flex;
@@ -509,9 +527,12 @@
     .question_type_1_img, .question_type_1_vid{
         min-width: 350px !important;
     }
+    .question_type_7_text_content{
+        font-size: 1.8vw !important;
+    }
     .question_type_7_body .question_type_7_content_container {
-        width: 80px !important;
-        height: 100px !important;
+        min-width: 20vw !important;
+        min-height: 12vw !important;
     }
     .question button{
         font-size: 20px !important;

@@ -37,12 +37,18 @@
 .math_equation_custom {
     font-size: 30px;
 }
-
+@media (max-width: 1100px){
+    .two_img_custom {
+        margin-bottom: 100px !important;
+    }
+}
 @media (max-width: 720px){
     .two_img_custom{
         flex-direction: column;
     }
     
+
+
     .two_img_custom > div {
         display: flex;
         align-items: center;

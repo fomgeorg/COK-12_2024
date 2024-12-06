@@ -226,13 +226,29 @@ function deletePopUpMain(){
         document.getElementById("popup_main").remove();
 }
 
+function positionDropdown(button, dropdown) {
+    console.log("positionDropdown")
+    const rect = button.getBoundingClientRect();
+    const containerRect = button.closest('.question_type_5_dropdown_answer').getBoundingClientRect();
+    dropdown.style.position = 'absolute';
+    dropdown.style.width = `${containerRect.width}px`; // Установить ширину дропдауна равной ширине контейнера
+    dropdown.style.top = `${rect.top - containerRect.top + rect.height}px`;
+    dropdown.style.left = `${rect.left - containerRect.left}px`;
+}
 
+function toggleDropdown(button, dropdown) {
+    positionDropdown(button, dropdown);
+    dropdown.classList.toggle('open');
+}
 
-
-
-
-
-
+// Пример использования функции toggleDropdown
+const buttons = document.querySelectorAll('.question_type_5_button');
+buttons.forEach(button => {
+    const dropdown = button.closest('.question_type_5_dropdown_answer').querySelector('.question_type_5_dropdown');
+    button.addEventListener('click', () => {
+        toggleDropdown(button, dropdown);
+    });
+});
 
 function createBodyPopUp_Type0(question){
 
@@ -320,8 +336,10 @@ function createAnswer_Type0(question, i){ let el = document.createElement("div")
             }
         }
     } else {
-        el.addEventListener('click', () => {
-            elChB.checked = !elChB.checked;
+        el.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('resize_btn')) {
+                elChB.checked = !elChB.checked;
+            }
         });
     }
     
@@ -449,9 +467,11 @@ function createAnswer_Type1(question, i){
 
         
     } else {
-        el.addEventListener('click', () => {
-            elChB.checked = !elChB.checked;
-            console.log('click')
+        el.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('resize_btn')) {  // Проверка наличия класса 'resize_btn'
+                elChB.checked = !elChB.checked;
+                console.log('click');
+            }
         });
     }
 
@@ -521,6 +541,7 @@ function createBodyPopUp_Type2(question){
 
     // Split text into placeholders and create corresponding elements
     let textAndPlaceholders = question.textDd.split(/(\||!)/);
+    if (textAndPlaceholders[0] === '') textAndPlaceholders.shift()
 
     let dropdownIndex = 0;
     let placeholderIndex = 0;
@@ -581,7 +602,6 @@ function createDropdown_Type2(question, dropdownIndex, placeholderIndex){
     elChB.setAttribute("id", `question_type_2_answer_${dropdownIndex}`);
     let elChBChB = document.createElement("div");
     elChBChB.setAttribute("class", "custom-dropdown-input-placeholder");
-
     let elChBChBChA;
     if (!passed){
         elChBChBChA = document.createTextNode("Выберите ответ");
@@ -627,7 +647,7 @@ function createDropdown_Type2(question, dropdownIndex, placeholderIndex){
             elChD.classList.toggle("closed");
         });
 
-        elChD.addEventListener('mouseup', function(e){
+        elChD.addEventListener('click', function(e){
             let text = e.target.innerHTML;
             elChBChB.innerHTML = text;
         });
@@ -656,10 +676,14 @@ function createInputField_Type2(question, index) {
     input.setAttribute("placeholder", "Введите ответ");
 
     if (passed) {
-        input.value = question.answered[index];
+        input.value = question.answered[index].charAt(0).toUpperCase() + question.answered[index].slice(1);
         input.disabled = true;
         // Применяем стили в зависимости от правильности ответа
-        if (question.correctAnswer[index].trim().toLowerCase() === input.value.trim().toLowerCase()) {
+        let correctAnswer = question.correctAnswer[index];
+        if (typeof correctAnswer !== 'string') {
+            correctAnswer = correctAnswer.toString();
+        }
+        if (correctAnswer.trim().toLowerCase() == input.value.trim().toLowerCase()) {
             input.style.backgroundColor = "#bdffbd"; // Правильный
         } else {
             input.style.backgroundColor = "#ffb9b9"; // Неправильный
@@ -935,7 +959,6 @@ function createDropdownBlock_Type5(question, i){
     }
 
     elChDChB.appendChild(elChDChBChA);
-
     elChD.appendChild(elChDChB);
 
     let elChDChD = document.createElement("div");
@@ -955,10 +978,12 @@ function createDropdownBlock_Type5(question, i){
         let elChDChFChBChA = document.createTextNode(`${question.answers[j]}`);
         
         if (!passed){
-            elChDChFChB.addEventListener('mouseup', function(e){
+            elChDChFChB.addEventListener('click', function(e){
+                e.stopPropagation(); // Предотвращаем всплытие события
                 text = e.target.innerHTML;
                 elChDChB.innerHTML = text;
                 elChD.classList.remove("un_answered");
+                elChDChF.classList.add("closed"); // Закрываем дропдаун
             });
         }
 
@@ -968,10 +993,22 @@ function createDropdownBlock_Type5(question, i){
 
     if (!passed){
         elChD.addEventListener('click', function(e){
+            // Закрываем все остальные открытые дропдауны
+            document.querySelectorAll('.custom-dropdown-image-select:not(.closed)').forEach(dropdown => {
+                if (dropdown !== elChDChF) {
+                    dropdown.classList.add("closed");
+                }
+            });
             elChDChF.classList.toggle("closed");
         });
+
+        // Закрываем дропдаун при клике вне его области
+        document.addEventListener('click', function(e) {
+            if (!elChD.contains(e.target)) {
+                elChDChF.classList.add("closed");
+            }
+        });
     }
-    
     
     elChD.appendChild(elChDChF);
     el.appendChild(elChD);
@@ -983,7 +1020,7 @@ function createResult(){
 
     let precentageCorrect = Math.round((countCorrectAnswered / countAnswered) * 100);
     let precentageWrong = Math.round(((countAnswered - countCorrectAnswered) / countAnswered) * 100);
-    let countQuestions = 10;
+    let countQuestions = allQuestions.length;
 
 
     let el = document.createElement("div");
@@ -1045,7 +1082,7 @@ function createResult(){
     elChBChDChD.appendChild(elChBChDChDChB);
     let elChBChDChDChD = document.createElement("div");
     elChBChDChDChD.setAttribute("id", "result_users_correct_answered");
-    let elChBChDChDChDChA = document.createTextNode(`${score} очков`);
+    let elChBChDChDChDChA = document.createTextNode(`${precentageCorrect} %`);
     elChBChDChDChD.appendChild(elChBChDChDChDChA);
     elChBChDChD.appendChild(elChBChDChDChD);
     elChBChD.appendChild(elChBChDChD);
@@ -1306,8 +1343,6 @@ function addAnswerClass_Type6(endPoint, questionId, index, userAnswers) {
     }
 }
 
-
-
 function createContentElement_Type6(content, side, index, questionId) {
     // Создаем контейнер для контента
     let contentContainer = document.createElement('div');
@@ -1333,7 +1368,7 @@ function createContentElement_Type6(content, side, index, questionId) {
         contentEl = document.createElement("div");
         contentEl.innerText = content.value;
         contentEl.classList.add('question_type_6_text_content');
-        if (content.value.length > 20 && false ) {
+        if (content.value.length > 20 && false) {
             contentIsNeedLoupe = true
             loupeClasses = loupeClasses + " resize_btn_type_6_text"
         }
@@ -1344,14 +1379,14 @@ function createContentElement_Type6(content, side, index, questionId) {
         contentEl.setAttribute("src", imgSrc);
         contentEl.setAttribute("alt", "image content");
         contentEl.classList.add('image-content');
-        contentIsNeedLoupe = true
+        contentIsNeedLoupe = true;
     } else if (content.type === 'video') {
         contentEl = document.createElement("video");
         
         let vidSrc = `content/quiz-media/type6/vid/${questionId}-${side === 'left' ? '0' : '1'}-${index}.mp4`;
         contentEl.setAttribute("src", vidSrc);
         contentEl.classList.add('video-content');
-        contentIsNeedLoupe = true
+        contentIsNeedLoupe = true;
     }
 
     contentContainer.appendChild(contentEl);
@@ -1361,19 +1396,18 @@ function createContentElement_Type6(content, side, index, questionId) {
     return contentContainer;
 }
 function createSVG_Type6(itemCount, userAnswers) {
-    // Create global SVG
+    // Создаем глобальный SVG
     var globalDraw = SVG().addTo('.question_type_6_mapping').size('100%', '100%').attr({ style: 'position: absolute; top: 0; left: 0;' });
 
-    // Initialize data object
+    // Инициализируем объект с данными
     var type6Data = {
         globalDraw: globalDraw,
         circles: {},
-        smallCircles: {}, // Add small circles storage
+        smallCircles: {},
         lines: {},
         startPositions: {},
         occupiedTargets: {},
         circleOccupancy: {},
-        mappingRect: document.querySelector('.question_type_6_mapping').getBoundingClientRect(),
         draggableEnabled: !allQuestions[currentQuestionId].answered,
         itemCount: itemCount
     };
@@ -1382,31 +1416,33 @@ function createSVG_Type6(itemCount, userAnswers) {
         createSVGElements_Type6(i, userAnswers, type6Data);
     }
 
-    // Add event listener for window resize
+    // Обработчик ресайза
     window.addEventListener('resize', updateSVG_Type6);
+    // Обработчик для zoom (ctrl+scroll)
+    window.addEventListener('wheel', function(event) {
+        if (event.ctrlKey) {
+            updateSVG_Type6();
+        }
+    });
 
-    // Save data for access from other functions
+    // Сохраняем данные
     window.type6Data = type6Data;
 }
 function createSVGElements_Type6(index, userAnswers, type6Data) {
-    // Извлекаем переменные из type6Data
-    var {globalDraw, mappingRect, circles, lines, startPositions, occupiedTargets, circleOccupancy, draggableEnabled, itemCount} = type6Data;
+    var {globalDraw, lines, startPositions} = type6Data;
 
     let startField = document.getElementById('startField' + index);
-    let endField = document.getElementById('targetField' + index);
 
-    let startRect = startField.getBoundingClientRect();
-
-    // Координаты центра стартовой точки
-    let startX = startRect.left - mappingRect.left + startRect.width / 2;
-    let startY = startRect.top - mappingRect.top + startRect.height / 2;
+    // Получаем координаты через offset
+    let startX = startField.offsetLeft + startField.offsetWidth / 2;
+    let startY = startField.offsetTop + startField.offsetHeight / 2;
     startPositions[index] = { x: startX, y: startY };
 
     // Создаем линию
-    let line = globalDraw.line().plot(startX, startY, startX, startY).stroke({ width: 3, color: '#0070c0' });
+    let line = globalDraw.line().plot(startX, startY, startX, startY).stroke({ width: 3, color: '#ff7276' });
     lines[index] = line;
 
-    // Создаем и инициализируем круг
+    // Создаем кружок
     createSVGCircle_Type6(index, userAnswers, type6Data);
 }
 function createSVGCircle_Type6(index, userAnswers, type6Data) {
@@ -1415,13 +1451,13 @@ function createSVGCircle_Type6(index, userAnswers, type6Data) {
     let startY = startPositions[index].y;
 
     // Create small circle
-    let circleAdd = globalDraw.circle(15).fill('#0070c0').center(startX, startY);
+    let circleAdd = globalDraw.circle(15).fill('#ff7276').center(startX, startY);
 
     // Store the small circle
     smallCircles[index] = circleAdd;
 
     // Create main circle
-    let circle = globalDraw.circle(30).fill('#0070c0').center(startX, startY).attr('id', 'draggableCircle' + index);
+    let circle = globalDraw.circle(30).fill('#ff7276').center(startX, startY).attr('id', 'draggableCircle' + index);
 
     circles[index] = circle;
     circleOccupancy[index] = null;
@@ -1433,9 +1469,8 @@ function createSVGCircle_Type6(index, userAnswers, type6Data) {
         let targetField = document.getElementById(targetFieldId);
 
         if (targetField) {
-            let targetRect = targetField.getBoundingClientRect();
-            let targetCenterX = targetRect.left - mappingRect.left + targetRect.width / 2;
-            let targetCenterY = targetRect.top - mappingRect.top + targetRect.height / 2;
+            let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+            let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
 
             // Перемещаем круг в центр таргета
             circle.center(targetCenterX, targetCenterY);
@@ -1470,25 +1505,21 @@ function onCircleDrag_Type6(e, circleElement, index, type6Data) {
     lines[index].plot(startPositions[index].x, startPositions[index].y, newX, newY);
 }
 function onCircleDragEnd_Type6(e, circleElement, index, type6Data) {
-    var { mappingRect, itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy } = type6Data;
-    let newX = circleElement.cx();
-    let newY = circleElement.cy();
+    var { itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy } = type6Data;
 
-    let circleRect = circleElement.node.getBoundingClientRect();
-    let circleCenterX = circleRect.left - mappingRect.left + circleRect.width / 2;
-    let circleCenterY = circleRect.top - mappingRect.top + circleRect.height / 2;
+    let circleCenterX = circleElement.cx();
+    let circleCenterY = circleElement.cy();
 
     let overTarget = false;
     let targetFieldId = null;
 
-    // Проверяем, находится ли круг над каким-либо таргет-полем
+    // Проверяем попадание в таргет
     for (let j = 0; j < itemCount; j++) {
         let targetField = document.getElementById('targetField' + j);
-        let targetRect = targetField.getBoundingClientRect();
-        let targetLeft = targetRect.left - mappingRect.left;
-        let targetRight = targetRect.right - mappingRect.left;
-        let targetTop = targetRect.top - mappingRect.top;
-        let targetBottom = targetRect.bottom - mappingRect.top;
+        let targetLeft = targetField.offsetLeft;
+        let targetRight = targetField.offsetLeft + targetField.offsetWidth;
+        let targetTop = targetField.offsetTop;
+        let targetBottom = targetField.offsetTop + targetField.offsetHeight;
 
         if (circleCenterX > targetLeft && circleCenterX < targetRight &&
             circleCenterY > targetTop && circleCenterY < targetBottom) {
@@ -1501,46 +1532,42 @@ function onCircleDragEnd_Type6(e, circleElement, index, type6Data) {
     if (overTarget) {
         // Проверяем, не занят ли таргет другим кружком
         if (occupiedTargets[targetFieldId] !== undefined && occupiedTargets[targetFieldId] !== index) {
-            // Таргет уже занят другим кружком, выполняем замену
             let previousCircleIndex = occupiedTargets[targetFieldId];
             let previousCircle = circles[previousCircleIndex];
 
-            // Возвращаем предыдущий кружок на стартовую позицию
+            // Возвращаем предыдущий кружок на старт
             previousCircle.animate(300).center(startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y);
             lines[previousCircleIndex].plot(startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y, startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y);
 
-            // Обновляем информацию о занятости
             circleOccupancy[previousCircleIndex] = null;
-        } else if (occupiedTargets[targetFieldId] === index) {
-            // Если таргет уже занят этим же кружком, ничего не делаем
         }
 
-        // Обновляем информацию о предыдущем таргете
+        // Обновляем инфу о предыдущем таргете, если был
         if (circleOccupancy[index] && circleOccupancy[index] !== targetFieldId) {
             delete occupiedTargets[circleOccupancy[index]];
         }
 
-        // Обновляем информацию о занятости
         occupiedTargets[targetFieldId] = index;
         circleOccupancy[index] = targetFieldId;
 
-        // Перемещаем текущий кружок в центр таргета
-        let targetRect = document.getElementById(targetFieldId).getBoundingClientRect();
-        let targetCenterX = targetRect.left - mappingRect.left + targetRect.width / 2;
-        let targetCenterY = targetRect.top - mappingRect.top + targetRect.height / 2;
+        let targetField = document.getElementById(targetFieldId);
+        let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+        let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
+
+        // Анимируем перемещение кружка в центр таргета
         circleElement.animate(300).center(targetCenterX, targetCenterY);
 
         // Обновляем линию
         lines[index].plot(startPositions[index].x, startPositions[index].y, targetCenterX, targetCenterY);
 
-        // Убираем обводку с таргета, если она была
-        document.getElementById(targetFieldId).classList.remove('error-type6');
+        // Снимаем класс ошибки
+        targetField.classList.remove('error-type6');
+
     } else {
-        // Возвращаем кружок на стартовую позицию
+        // Кружок не над таргетом — возвращаем на старт
         circleElement.animate(300).center(startPositions[index].x, startPositions[index].y);
         lines[index].plot(startPositions[index].x, startPositions[index].y, startPositions[index].x, startPositions[index].y);
 
-        // Обновляем информацию о занятости
         if (circleOccupancy[index]) {
             delete occupiedTargets[circleOccupancy[index]];
             circleOccupancy[index] = null;
@@ -1549,60 +1576,40 @@ function onCircleDragEnd_Type6(e, circleElement, index, type6Data) {
 }
 function updateSVG_Type6() {
     var type6Data = window.type6Data;
-    if (!type6Data) return; // Exit if type6Data is not initialized
-
-    // Update mappingRect
-    type6Data.mappingRect = document.querySelector('.question_type_6_mapping').getBoundingClientRect();
+    if (!type6Data) return;
 
     var { itemCount, circles, smallCircles, lines, startPositions, occupiedTargets, circleOccupancy } = type6Data;
 
-    // Recalculate start positions
+    // Пересчитываем стартовые позиции без getBoundingClientRect:
     for (let i = 0; i < itemCount; i++) {
         let startField = document.getElementById('startField' + i);
-        let startRect = startField.getBoundingClientRect();
-
-        // Update startPositions
-        let startX = startRect.left - type6Data.mappingRect.left + startRect.width / 2;
-        let startY = startRect.top - type6Data.mappingRect.top + startRect.height / 2;
+        let startX = startField.offsetLeft + startField.offsetWidth / 2;
+        let startY = startField.offsetTop + startField.offsetHeight / 2;
         startPositions[i] = { x: startX, y: startY };
     }
 
-    // Update positions of circles, small circles, and lines
+    // Обновляем позиции кружков и линий
     for (let i = 0; i < itemCount; i++) {
         let circle = circles[i];
         let smallCircle = smallCircles[i];
         let line = lines[i];
 
         let isOnTarget = circleOccupancy[i] !== null;
+        let startX = startPositions[i].x;
+        let startY = startPositions[i].y;
 
         if (isOnTarget) {
-            // Circle is on a target; update its position
             let targetFieldId = circleOccupancy[i];
             let targetField = document.getElementById(targetFieldId);
-            let targetRect = targetField.getBoundingClientRect();
+            let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+            let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
 
-            let targetCenterX = targetRect.left - type6Data.mappingRect.left + targetRect.width / 2;
-            let targetCenterY = targetRect.top - type6Data.mappingRect.top + targetRect.height / 2;
-
-            // Move main circle to new target center
             circle.center(targetCenterX, targetCenterY);
-
-            // Update line
-            line.plot(startPositions[i].x, startPositions[i].y, targetCenterX, targetCenterY);
-
-            // Keep small circle at the start position
-            smallCircle.center(startPositions[i].x, startPositions[i].y);
+            line.plot(startX, startY, targetCenterX, targetCenterY);
+            smallCircle.center(startX, startY);
         } else {
-            // Circle is at its initial position; update position
-            let startX = startPositions[i].x;
-            let startY = startPositions[i].y;
-
             circle.center(startX, startY);
-
-            // Update line
             line.plot(startX, startY, startX, startY);
-
-            // Move small circle to the start position
             smallCircle.center(startX, startY);
         }
     }
@@ -1735,19 +1742,16 @@ function createContentElement_Type7(content, position, index, questionId) {
     return contentContainer;
 }
 function createSVG_Type7(itemCount, userAnswers) {
-    // Создаем глобальный SVG
     var globalDraw = SVG().addTo('.question_type_7_mapping').size('100%', '100%').attr({ style: 'position: absolute; top: 0; left: 0; z-index: 10;' });
 
-    // Инициализируем объект данных
     var type7Data = {
         globalDraw: globalDraw,
         circles: {},
-        smallCircles: {}, // Добавляем для хранения маленьких кругов
+        smallCircles: {},
         lines: {},
         startPositions: {},
         occupiedTargets: {},
         circleOccupancy: {},
-        mappingRect: document.querySelector('.question_type_7_mapping').getBoundingClientRect(),
         draggableEnabled: !allQuestions[currentQuestionId].answered,
         itemCount: itemCount
     };
@@ -1756,58 +1760,50 @@ function createSVG_Type7(itemCount, userAnswers) {
         createSVGElements_Type7(i, userAnswers, type7Data);
     }
 
-    // Добавляем обработчик события изменения размера окна
+    // Пересчет при resize и zoom
     window.addEventListener('resize', updateSVG_Type7);
+    window.addEventListener('wheel', function(event) {
+        if (event.ctrlKey) {
+            updateSVG_Type7();
+        }
+    });
 
-    // Сохраняем данные для доступа из других функций
     window.type7Data = type7Data;
 }
 function createSVGElements_Type7(index, userAnswers, type7Data) {
-    // Извлекаем переменные из type7Data
-    var { globalDraw, mappingRect, circles, smallCircles, lines, startPositions, occupiedTargets, circleOccupancy, draggableEnabled, itemCount } = type7Data;
+    var { globalDraw, lines, startPositions } = type7Data;
 
     let startField = document.getElementById('startField' + index);
-    let endField = document.getElementById('targetField' + index);
 
-    let startRect = startField.getBoundingClientRect();
-
-    // Координаты центра стартовой точки
-    let startX = startRect.left - mappingRect.left + startRect.width / 2;
-    let startY = startRect.top - mappingRect.top + startRect.height / 2;
+    let startX = startField.offsetLeft + startField.offsetWidth / 2;
+    let startY = startField.offsetTop + startField.offsetHeight / 2;
     startPositions[index] = { x: startX, y: startY };
 
-    // Создаем линию
-    let line = globalDraw.line().plot(startX, startY, startX, startY).stroke({ width: 3, color: '#0070c06' });
+    let line = globalDraw.line().plot(startX, startY, startX, startY).stroke({ width: 3, color: '#ff7276' });
     lines[index] = line;
 
-    // Создаем и инициализируем круг
     createSVGCircle_Type7(index, userAnswers, type7Data);
 }
 function createSVGCircle_Type7(index, userAnswers, type7Data) {
-    var { globalDraw, mappingRect, circles, smallCircles, lines, startPositions, occupiedTargets, circleOccupancy, draggableEnabled, itemCount } = type7Data;
+    var { globalDraw, circles, smallCircles, lines, startPositions, occupiedTargets, circleOccupancy, draggableEnabled } = type7Data;
     let startX = startPositions[index].x;
     let startY = startPositions[index].y;
 
-    // Создаем доп круг
-    let circleAdd = globalDraw.circle(15).fill('#0070c06').center(startX, startY);
-    smallCircles[index] = circleAdd; // Сохраняем маленький круг
+    let circleAdd = globalDraw.circle(15).fill('#ff7276').center(startX, startY);
+    smallCircles[index] = circleAdd;
 
-    // Создаем круг
-    let circle = globalDraw.circle(30).fill('#0070c06').center(startX, startY).attr('id', 'draggableCircle7_' + index);
-
+    let circle = globalDraw.circle(30).fill('#ff7276').center(startX, startY).attr('id', 'draggableCircle7_' + index);
     circles[index] = circle;
     circleOccupancy[index] = null;
 
-    // Проверяем, есть ли предыдущий ответ для данного круга
     if (userAnswers && userAnswers[index] !== null && userAnswers[index] !== undefined) {
         let targetIndex = userAnswers[index];
         let targetFieldId = 'targetField' + targetIndex;
         let targetField = document.getElementById(targetFieldId);
 
         if (targetField) {
-            let targetRect = targetField.getBoundingClientRect();
-            let targetCenterX = targetRect.left - mappingRect.left + targetRect.width / 2;
-            let targetCenterY = targetRect.top - mappingRect.top + targetRect.height / 2;
+            let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+            let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
 
             // Перемещаем круг в центр таргета
             circle.center(targetCenterX, targetCenterY);
@@ -1822,12 +1818,10 @@ function createSVGCircle_Type7(index, userAnswers, type7Data) {
     }
 
     if (draggableEnabled) {
-        // Делаем круг перетаскиваемым
         circle.draggable().on('dragmove', function (e) {
             onCircleDrag_Type7(e, this, index, type7Data);
         });
 
-        // Обработка окончания перетаскивания
         circle.on('dragend', function (e) {
             onCircleDragEnd_Type7(e, this, index, type7Data);
         });
@@ -1842,25 +1836,20 @@ function onCircleDrag_Type7(e, circleElement, index, type7Data) {
     lines[index].plot(startPositions[index].x, startPositions[index].y, newX, newY);
 }
 function onCircleDragEnd_Type7(e, circleElement, index, type7Data) {
-    var { mappingRect, itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy } = type7Data;
-    let newX = circleElement.cx();
-    let newY = circleElement.cy();
+    var { itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy } = type7Data;
 
-    let circleRect = circleElement.node.getBoundingClientRect();
-    let circleCenterX = circleRect.left - mappingRect.left + circleRect.width / 2;
-    let circleCenterY = circleRect.top - mappingRect.top + circleRect.height / 2;
+    let circleCenterX = circleElement.cx();
+    let circleCenterY = circleElement.cy();
 
     let overTarget = false;
     let targetFieldId = null;
 
-    // Проверяем, находится ли круг над каким-либо таргет-полем
     for (let j = 0; j < itemCount; j++) {
         let targetField = document.getElementById('targetField' + j);
-        let targetRect = targetField.getBoundingClientRect();
-        let targetLeft = targetRect.left - mappingRect.left;
-        let targetRight = targetRect.right - mappingRect.left;
-        let targetTop = targetRect.top - mappingRect.top;
-        let targetBottom = targetRect.bottom - mappingRect.top;
+        let targetLeft = targetField.offsetLeft;
+        let targetRight = targetField.offsetLeft + targetField.offsetWidth;
+        let targetTop = targetField.offsetTop;
+        let targetBottom = targetField.offsetTop + targetField.offsetHeight;
 
         if (circleCenterX > targetLeft && circleCenterX < targetRight &&
             circleCenterY > targetTop && circleCenterY < targetBottom) {
@@ -1871,48 +1860,35 @@ function onCircleDragEnd_Type7(e, circleElement, index, type7Data) {
     }
 
     if (overTarget) {
-        // Проверяем, не занят ли таргет другим кружком
         if (occupiedTargets[targetFieldId] !== undefined && occupiedTargets[targetFieldId] !== index) {
-            // Таргет уже занят другим кружком, выполняем замену
             let previousCircleIndex = occupiedTargets[targetFieldId];
             let previousCircle = circles[previousCircleIndex];
 
-            // Возвращаем предыдущий кружок на стартовую позицию
             previousCircle.animate(300).center(startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y);
             lines[previousCircleIndex].plot(startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y, startPositions[previousCircleIndex].x, startPositions[previousCircleIndex].y);
 
-            // Обновляем информацию о занятости
             circleOccupancy[previousCircleIndex] = null;
-        } else if (occupiedTargets[targetFieldId] === index) {
-            // Если таргет уже занят этим же кружком, ничего не делаем
         }
 
-        // Обновляем информацию о предыдущем таргете
         if (circleOccupancy[index] && circleOccupancy[index] !== targetFieldId) {
             delete occupiedTargets[circleOccupancy[index]];
         }
 
-        // Обновляем информацию о занятости
         occupiedTargets[targetFieldId] = index;
         circleOccupancy[index] = targetFieldId;
 
-        // Перемещаем текущий кружок в центр таргета
-        let targetRect = document.getElementById(targetFieldId).getBoundingClientRect();
-        let targetCenterX = targetRect.left - mappingRect.left + targetRect.width / 2;
-        let targetCenterY = targetRect.top - mappingRect.top + targetRect.height / 2;
-        circleElement.animate(300).center(targetCenterX, targetCenterY);
+        let targetField = document.getElementById(targetFieldId);
+        let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+        let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
 
-        // Обновляем линию
+        circleElement.animate(300).center(targetCenterX, targetCenterY);
         lines[index].plot(startPositions[index].x, startPositions[index].y, targetCenterX, targetCenterY);
 
-        // Убираем обводку с таргета, если она была
-        document.getElementById(targetFieldId).classList.remove('error-border');
+        targetField.classList.remove('error-border');
     } else {
-        // Возвращаем кружок на стартовую позицию
         circleElement.animate(300).center(startPositions[index].x, startPositions[index].y);
         lines[index].plot(startPositions[index].x, startPositions[index].y, startPositions[index].x, startPositions[index].y);
 
-        // Обновляем информацию о занятости
         if (circleOccupancy[index]) {
             delete occupiedTargets[circleOccupancy[index]];
             circleOccupancy[index] = null;
@@ -1922,7 +1898,7 @@ function onCircleDragEnd_Type7(e, circleElement, index, type7Data) {
 function addAnswerClass_Type7(endPoint, index) {
     let userAnswers = allQuestions[currentQuestionId].answered;
     let question = allQuestions[currentQuestionId];
-    let correctAnswers = question.correctAnswer; // Предполагаем, что правильные ответы хранятся в correctAnswer
+    let correctAnswers = question.correctAnswer; // Assume correct answers are stored in correctAnswer
     let userAnswer = userAnswers[index];
 
     if (userAnswer !== null && userAnswer !== undefined) {
@@ -1932,76 +1908,47 @@ function addAnswerClass_Type7(endPoint, index) {
             endPoint.classList.add('wrong-answer');
         }
     } else {
-        // Пользователь не дал ответ для этого элемента
+        // User did not answer this item
         endPoint.classList.add('wrong-answer');
     }
 }
 function updateSVG_Type7() {
     var type7Data = window.type7Data;
-    if (!type7Data) return; // Если данные не инициализированы, выходим из функции
+    if (!type7Data) return;
 
-    // Обновляем mappingRect
-    type7Data.mappingRect = document.querySelector('.question_type_7_mapping').getBoundingClientRect();
+    var { itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy, smallCircles } = type7Data;
 
-    var { itemCount, circles, lines, startPositions, occupiedTargets, circleOccupancy } = type7Data;
-
-    // Пересчитываем стартовые позиции
     for (let i = 0; i < itemCount; i++) {
         let startField = document.getElementById('startField' + i);
-        let startRect = startField.getBoundingClientRect();
-
-        // Обновляем стартовые позиции
-        let startX = startRect.left - type7Data.mappingRect.left + startRect.width / 2;
-        let startY = startRect.top - type7Data.mappingRect.top + startRect.height / 2;
+        let startX = startField.offsetLeft + startField.offsetWidth / 2;
+        let startY = startField.offsetTop + startField.offsetHeight / 2;
         startPositions[i] = { x: startX, y: startY };
     }
 
-    // Обновляем позиции кругов и линий
     for (let i = 0; i < itemCount; i++) {
         let circle = circles[i];
         let line = lines[i];
+        let startX = startPositions[i].x;
+        let startY = startPositions[i].y;
 
         let isOnTarget = circleOccupancy[i] !== null;
 
         if (isOnTarget) {
-            // Круг находится на таргете; обновляем его позицию
             let targetFieldId = circleOccupancy[i];
             let targetField = document.getElementById(targetFieldId);
-            let targetRect = targetField.getBoundingClientRect();
+            let targetCenterX = targetField.offsetLeft + targetField.offsetWidth / 2;
+            let targetCenterY = targetField.offsetTop + targetField.offsetHeight / 2;
 
-            let targetCenterX = targetRect.left - type7Data.mappingRect.left + targetRect.width / 2;
-            let targetCenterY = targetRect.top - type7Data.mappingRect.top + targetRect.height / 2;
-
-            // Перемещаем круг на новую позицию таргета
             circle.center(targetCenterX, targetCenterY);
-
-            // Обновляем линию
-            line.plot(startPositions[i].x, startPositions[i].y, targetCenterX, targetCenterY);
+            line.plot(startX, startY, targetCenterX, targetCenterY);
         } else {
-            // Круг находится на стартовой позиции; обновляем позицию
-            let startX = startPositions[i].x;
-            let startY = startPositions[i].y;
-
             circle.center(startX, startY);
-
-            // Обновляем линию
             line.plot(startX, startY, startX, startY);
         }
 
-        // Обновляем дополнительный круг (circleAdd)
-        let circleAdd = type7Data.smallCircles[i];
+        let circleAdd = smallCircles[i];
         if (circleAdd) {
-            let startX = startPositions[i].x;
-            let startY = startPositions[i].y;
             circleAdd.center(startX, startY);
         }
     }
 }
-
-
-
-
-
-
-
-
