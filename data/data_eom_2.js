@@ -24,7 +24,7 @@ const data = {
                 <span class="math_equation math_equation_custom">$ \\frac{F_1}{CB} = \\frac{R}{AB} $</span>. <br><br>
                 Из этого соотношения
                 <span class="math_equation math_equation_custom">$ CB = \\frac{F_1 \\cdot AB}{R} = \\frac{170 \\cdot 0.8}{230} = 0.59 \\text{м} $</span>. <br>
-                Модуль равнодействующей <span class="math_equation">$ R = 230 \\text{ Н} $</span> и ее линия действия будет проходить через точку <span class="math_equation">$ C $</span>, расположенную на расстоянии <span class="math_equation">$ 0.59 , \\text{м} $</span> от линии действия силы <span class="math_equation">$ \\vec{F_2} $</span>.` }
+                Модуль равнодействующей <span class="math_equation">$ R = 230 \\text{ Н} $</span> и ее линия действия будет проходить через точку <span class="math_equation">$ C $</span>, расположенную на расстоянии <span class="math_equation">$ 0.59 \\text{м} $</span> от линии действия силы <span class="math_equation">$ \\vec{F_2} $</span>.` }
         ]
     },
     "index_2":{
